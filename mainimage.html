@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Image Resize | Professional Bulk Photo Resizer by Rafid Ahammed</title>
+    <meta name="description" content="Fast, private, and 100% free bulk image resizer. Resize multiple photos to JPG, PNG, or WebP instantly. Optimized for performance and privacy.">
+    <meta name="keywords" content="image resize, bulk resizer, photo compressor, rafid ahammed, online resizer, batch image resize, webp converter">
+    <meta name="author" content="Rafid Ahammed">
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Image Resize - High-Speed Batch Photo Processing">
+    <meta property="og:description" content="The fastest and most private way to resize images in bulk. 100% free with zero quality loss.">
+    <meta property="og:image" content="og-image.png">
+    <meta property="og:url" content="https://yourdomain.com">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Image Resize | Professional Bulk Resizer">
+    <meta name="twitter:description" content="Resize, Compress, and Convert images in seconds. Private client-side processing.">
+    <meta name="twitter:image" content="og-image.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Image Resize",
+      "url": "https://yourdomain.com",
+      "image": "og-image.png",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "author": {
+        "@type": "Person",
+        "name": "Rafid Ahammed"
+      }
+    }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body { background-color: #f8fafc; color: #1e293b; font-family: 'Inter', sans-serif; }
+        .main-card { background: white; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
+        .input-field { background-color: #ffffff; border: 1px solid #cbd5e1; color: #1e293b; border-radius: 0.75rem; padding: 1rem; outline: none; }
+        .input-field:focus { border-color: #3b82f6; }
+        .upload-area { border: 2px dashed #cbd5e1; background-color: #f1f5f9; border-radius: 1.5rem; transition: all 0.3s; cursor: pointer; }
+        .upload-area:hover { border-color: #3b82f6; background-color: #eff6ff; }
+        .feature-box { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 1.5rem; padding: 1.5rem; }
+        .feature-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
+        .loader { width: 35px; height: 35px; border: 4px solid #f1f5f9; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; display: none; margin: 10px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        input[type=range] { width: 100%; height: 6px; background: #e2e8f0; border-radius: 5px; outline: none; appearance: none; }
+        input[type=range]::-webkit-slider-thumb { appearance: none; width: 18px; height: 18px; background: #3b82f6; border-radius: 50%; cursor: pointer; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-6 text-center">
+
+    <div class="main-card w-full max-w-xl p-8 rounded-[2.5rem] my-10">
+        <h1 class="text-3xl font-black text-slate-800 italic uppercase tracking-tight">Image Resize</h1>
+        <p class="text-slate-400 text-[10px] tracking-widest uppercase mt-1 mb-6 font-bold">The Ultimate Bulk Resizer</p>
+
+        <div id="uploadContainer" onclick="document.getElementById('imageInput').click()" class="upload-area p-8 text-center mb-6">
+            <input type="file" id="imageInput" accept="image/*" multiple class="hidden">
+            <div id="uploadPrompt">
+                <i class="fas fa-images text-4xl text-blue-500 mb-3"></i>
+                <p class="text-slate-600 font-bold uppercase text-sm">Drop or Select Multiple Photos</p>
+                <p class="text-slate-400 text-[10px] uppercase mt-1">Unlimited • Secure • No Upload</p>
+            </div>
+            <div id="uploadLoader" class="loader"></div>
+            <p id="uploadStatus" class="hidden text-green-600 font-black mt-2 uppercase text-xs"></p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-4 text-left">
+            <div>
+                <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Width (px)</label>
+                <input type="number" id="widthInput" value="1080" class="input-field w-full mt-1">
+            </div>
+            <div>
+                <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Height (px)</label>
+                <input type="number" id="heightInput" value="1080" class="input-field w-full mt-1">
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-6 text-left">
+            <div>
+                <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Output Format</label>
+                <select id="formatSelect" class="input-field w-full mt-1">
+                    <option value="webp">WebP (Best SEO)</option>
+                    <option value="jpeg">JPG</option>
+                    <option value="png">PNG</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Quality: <span id="qVal" class="text-blue-600">80</span>%</label>
+                <input type="range" id="qualityInput" min="1" max="100" value="80" class="mt-4" oninput="document.getElementById('qVal').innerText = this.value">
+            </div>
+        </div>
+
+        <button onclick="processImages()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl shadow-lg transition-all active:scale-95 uppercase mb-8">
+            Process & Export Batch
+        </button>
+
+        <div class="feature-box mb-4">
+            <h2 class="text-sm font-bold mb-4 text-slate-800 italic uppercase">Pro Features</h2>
+            <div class="grid grid-cols-2 gap-y-4 gap-x-2 text-left">
+                <div class="feature-item">🚀 <span>Lightning Speed</span></div>
+                <div class="feature-item">💯 <span>100% Free</span></div>
+                <div class="feature-item">♾️ <span>Bulk Processing</span></div>
+                <div class="feature-item">👍 <span>High Quality</span></div>
+                <div class="feature-item">✅ <span>No Sign-Up</span></div>
+                <div class="feature-item">🔒 <span>Secure & Private</span></div>
+            </div>
+        </div>
+
+        <div id="finalSection" class="hidden border-t border-slate-100 mt-8 pt-6">
+            <h3 class="text-[10px] font-bold text-slate-400 uppercase mb-4 tracking-widest">Ready to Download</h3>
+            <div id="bulkContainer" class="grid grid-cols-1 gap-3"></div>
+        </div>
+    </div>
+
+    <div class="w-full max-w-xl text-left bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm mb-6">
+        <h2 class="text-blue-600 font-black text-xl italic mb-3 uppercase">Professional Batch Image Resizing</h2>
+        <p class="text-slate-500 text-sm leading-relaxed mb-4"><strong>Image Resize</strong> by <strong>Rafid Ahammed</strong> is your ultimate solution for web image optimization. Scale thousands of photos instantly with our secure, client-side processing technology.</p>
+    </div>
+
+    <footer class="text-slate-400 text-[9px] uppercase tracking-widest mb-10 font-bold">
+        <div>&copy; 2026 Image Resize | All Rights Reserved</div>
+        <div class="mt-2 text-[8px] text-slate-300">Proudly Developed by Rafid Ahammed</div>
+    </footer>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const uploadLoader = document.getElementById('uploadLoader');
+        const uploadStatus = document.getElementById('uploadStatus');
+        const uploadPrompt = document.getElementById('uploadPrompt');
+        const finalSection = document.getElementById('finalSection');
+        const bulkContainer = document.getElementById('bulkContainer');
+
+        imageInput.onchange = function() {
+            const count = this.files.length;
+            if (count > 0) {
+                uploadPrompt.classList.add('hidden');
+                uploadLoader.style.display = 'block';
+                uploadStatus.classList.add('hidden');
+                setTimeout(() => {
+                    uploadLoader.style.display = 'none';
+                    uploadStatus.innerText = `${count} Image(s) selected`;
+                    uploadStatus.classList.remove('hidden');
+                }, 600); 
+            }
+        };
+
+        async function processImages() {
+            const files = imageInput.files;
+            const w = document.getElementById('widthInput').value;
+            const h = document.getElementById('heightInput').value;
+            const format = document.getElementById('formatSelect').value;
+            const quality = document.getElementById('qualityInput').value / 100;
+
+            if (files.length === 0 || !w || !h) { 
+                alert("Please select images and set dimensions!"); 
+                return; 
+            }
+
+            bulkContainer.innerHTML = ''; 
+            finalSection.classList.remove('hidden');
+
+            for (let file of files) {
+                const dataUrl = await resizeImage(file, w, h, format, quality);
+                createPreviewCard(dataUrl, file.name, format);
+            }
+            window.scrollTo({ top: finalSection.offsetTop, behavior: 'smooth' });
+        }
+
+        function resizeImage(file, w, h, format, quality) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = w; canvas.height = h;
+                        ctx.drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL(`image/${format === 'jpeg' ? 'jpeg' : format}`, quality));
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function createPreviewCard(url, name, format) {
+            const ext = format === 'jpeg' ? 'jpg' : format;
+            const card = document.createElement('div');
+            card.className = "bg-slate-50 p-3 rounded-xl flex items-center gap-4 border border-slate-200 shadow-sm";
+            card.innerHTML = `
+                <img src="${url}" class="w-12 h-12 object-cover rounded-md border border-slate-200">
+                <div class="flex-1 text-left min-w-0">
+                    <p class="text-[9px] text-slate-500 truncate font-black uppercase italic">${name}</p>
+                    <a href="${url}" download="resized_${name.split('.')[0]}.${ext}" 
+                       class="text-blue-600 text-[10px] font-black uppercase hover:underline">
+                       Download ${ext.toUpperCase()}
+                    </a>
+                </div>
+                <i class="fas fa-check-circle text-green-500 text-xs"></i>
+            `;
+            bulkContainer.appendChild(card);
+        }
+    </script>
+</body>
+</html>
