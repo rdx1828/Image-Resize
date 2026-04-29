@@ -1,0 +1,14 @@
+# ************************************************
+# Advanced Robots.txt for Image Resize by Rafid Ahammed
+# URL: https://rdx1828.github.io/Image-Resize/
+# ************************************************
+
+User-agent: *
+Allow: /
+Allow: /index.html
+
+# Sitemaps
+Sitemap: https://rdx1828.github.io/Image-Resize/sitemap.xml
+
+# Performance optimization for crawlers
+Crawl-delay: 1
